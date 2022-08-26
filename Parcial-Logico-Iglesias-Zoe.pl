@@ -85,3 +85,52 @@ rubro(planSocial(Organizacion),Rubro):-
 esObrera(Universidad):-
     universidad(Universidad),
     forall(estudia(Estudiante,_,Universidad), trabaja(Estudiante,_,_)).
+    
+    esExigente(Carrera,Universidad):-
+    estudia(_,Carrera,Universidad),
+    forall(estudia(Estudiante,Carrera,Universidad), not(trabaja(Estudiante,_,_))).
+
+% 2.)
+esExigente(Carrera,Universidad):-
+    estudia(_,Carrera,Universidad),
+    forall(estudia(Estudiante,Carrera,Universidad),(not(estudia(Estudiante,OtraCarrera,_)),Carrera \= OtraCarrera)).
+
+% 3.)
+universidadTrabajadora(Universidad):-
+    porcentajeEstudiantesTrabajadores(Universidad,Porcentaje),
+    forall((porcentajeEstudiantesTrabajadores(OtraUniversidad,Porcentaje2), Universidad \= OtraUniversidad), Porcentaje > Porcentaje2).
+
+
+cantidadDeTrabajadores(Universidad,CantidadDeTrabajadores):-
+    universidad(Universidad),
+    findall(Estudiante,(estudia(Estudiante,_,Universidad), trabaja(Estudiante,_,_)), ListaCantTrabajadores),
+    length(ListaCantTrabajadores, CantidadDeTrabajadores).
+
+cantidadDeEstudiantes(Universidad,CantidadDeEstudiantes):-
+    universidad(Universidad),
+    findall(Estudiante,estudia(Estudiante,_,Universidad), ListaDeEstudiantes),
+    length(ListaDeEstudiantes, CantidadDeEstudiantes).
+
+porcentajeEstudiantesTrabajadores(Universidad, Porcentaje):-
+    universidad(Universidad),
+    cantidadDeEstudiantes(Universidad,CantidadDeEstudiantes),
+    cantidadDeTrabajadores(Universidad,CantidadDeTrabajadores),
+    CantidadDeTrabajadores \= 0,
+    Porcentaje is ((CantidadDeEstudiantes * 10) / CantidadDeTrabajadores).
+
+% 4.)
+trabajaEnOtraCosa(Estudiante):-
+    estudia(Estudiante,_,_),
+    trabaja(Estudiante,_,_),
+    forall((trabaja(Estudiante,Trabajo,_), rubro(Trabajo,Rubro)), not(estaVinculado(Estudiante,Rubro))).
+
+estaVinculado(Estudiante,Rubro):-
+    estudia(Estudiante,Carrera,_),
+    habilitacionProfesional(Carrera,ListaDeRubros),
+    member(Rubro,ListaDeRubros).
+
+% 5.)
+carrerasDemandadas(Carrera):-
+    carrera(Carrera),
+    forall((estudia(Estudiante,Carrera,_), trabaja(Estudiante,Trabajo,_), rubro(Trabajo,Rubro)), estaVinculado(Estudiante,Rubro)).
+
