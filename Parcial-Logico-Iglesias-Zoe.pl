@@ -133,4 +133,33 @@ estaVinculado(Estudiante,Rubro):-
 carrerasDemandadas(Carrera):-
     carrera(Carrera),
     forall((estudia(Estudiante,Carrera,_), trabaja(Estudiante,Trabajo,_), rubro(Trabajo,Rubro)), estaVinculado(Estudiante,Rubro)).
+   
+  /* Trabajo Creativo */
+
+/* La nueva modalidad de trabajo emprendedor se podria agregar muy facilmente a nuestra base de conocimientos;
+    al igual que las otras modalidades se utilizaria como un functor de aridad 2 de la siguiente manera
+    
+    trabaja(persona,emprendedor(NombreDelEmprendimiento, Rubro),CantidadDeHoras).
+
+    Ejemplo:
+     
+        trabaja(juana,emprendedor(juanArte, pinturas),_).
+
+    Supongamos que Juana a su vez tmb estudia artes escenicas
+
+        estudia(juana,arte,uba).
+
+    Tambien contantamos con la habilitacion profesional de las arte
+
+        habilitacionProfesional(arte,[actuacion, escultura, pintura, musica]).
+
+    Solo nos quedaria agregar seria otro hecho en el predicado rubro que nos de el trabajo de la persona, 
+    es decir le pasamos el functor y nos duvuelve solo el trabajo, esto al igual que hemos hecho con los otros trabajos,
+    se puede definir de manera muy facil de la siguiente manera.
+
+        rubro(emprendedor(_,Rubro),Rubro).
+
+    Como podemos observar no es necesario cambiar muchas cosas de nuetsro codigo si necesitamos
+    agregar nuevas cosas, como un nuevo trabajo, a este concepto se lo conoce como acoplamiento,
+    que es el grado en el que los componentes se conocen.*/
 
